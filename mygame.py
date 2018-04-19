@@ -29,7 +29,6 @@ window = pygame.display.set_mode((1024, 768), 0, 32)
 pygame.display.set_caption('Hungry Snake')
 key = pygame.key.get_pressed()
 
-
 head = Head(500, 300)
 game = True
 
