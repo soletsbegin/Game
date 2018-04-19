@@ -11,6 +11,8 @@ def Intersect(obj1, obj2):
         return 1
     else:
         return 0
+
+
 def move():
     if key[pygame.K_DOWN]:
         head.go_down()
