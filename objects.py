@@ -57,25 +57,3 @@ class Head(sprite.Sprite):
 
     def render(self):
         SCREEN.blit(self.bitmap, (self.xpos, self.ypos))
-
-
-class Platform():
-        def __init__(self, x, y, filename):
-            self.xpos = x
-            self.ypos = y
-            self.bitmap = pygame.image.load(os.path.join('graphics', filename))
-            self.limits = {'x': 1, 'y': 1}
-
-        def motion(self):
-            if self.limits['y'] == 1:
-                self.ypos += SPEED['5']
-                if self.ypos > WIDTH-60:
-                    self.limits['y'] = 0
-            else:
-                self.ypos -= SPEED['5']
-                if self.ypos < 0:
-                    self.limits['y'] = 1
-
-        def render(self):
-            SCREEN.blit(self.bitmap, (self.xpos, self.ypos))
-
