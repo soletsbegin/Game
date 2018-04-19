@@ -41,13 +41,11 @@ class Head(sprite.Sprite):
     def go_up(self):
         self.ypos -= SPEED['5']
         self.bitmap = pygame.image.load(os.path.join('graphics','headup.png'))
-
         self.check_position()
 
     def go_left(self):
         self.xpos -= SPEED['5']
         self.bitmap = pygame.image.load(os.path.join('graphics','headleft.png'))
-
         self.check_position()
 
     def go_right(self):
@@ -57,3 +55,11 @@ class Head(sprite.Sprite):
 
     def render(self):
         SCREEN.blit(self.bitmap, (self.xpos, self.ypos))
+
+
+class Food(sprite.Sprite):
+
+    food = dict()
+
+    def __init__(self):
+        self.type = 0
