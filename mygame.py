@@ -27,7 +27,6 @@ pygame.init()
 
 window = pygame.display.set_mode((1024, 768), 0, 32)
 pygame.display.set_caption('Hungry Snake')
-key = pygame.key.get_pressed()
 
 head = Head(500, 300)
 game = True
@@ -36,6 +35,7 @@ while game:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             game = False
+    key = pygame.key.get_pressed()
     move()
 
     SCREEN.fill(BACKGROUND_COLOR)
