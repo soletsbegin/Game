@@ -1,11 +1,10 @@
 import pygame
 from objects import *
-import os
+from screen import *
+import sys
 
-BACKGROUND_COLOR = (34, 139, 34)
 food = []
 body = []
-
 scores = 0
 head = Head(500, 300)
 
@@ -37,14 +36,10 @@ def action():
     if key[pygame.K_RIGHT]:
         head.change_vector('right')
     if key[pygame.K_ESCAPE]:
-        pygame.quit()
+        sys.exit()
 
 
 pygame.init()
-
-window = pygame.display.set_mode((WIDTH, HEIGTH), 0, 32)
-pygame.display.set_caption('Hungry Snake')
-
 game = True
 count = 0
 
@@ -66,10 +61,11 @@ while game:
         food.append(Food())
 
     SCREEN.fill(BACKGROUND_COLOR)
-    head.render()
+    head.draw(SCREEN)
     for f in food:
         f.draw()
     window.blit(SCREEN, (0, 0))
-    pygame.display.flip()
+    pygame.display.update()
+
 
 print(scores)

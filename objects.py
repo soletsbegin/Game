@@ -15,6 +15,7 @@ TEXTURES =[pygame.image.load(os.path.join('graphics', 'tx', 't1.jpg')),
            pygame.image.load(os.path.join('graphics', 'tx', 't7.jpg')),
            pygame.image.load(os.path.join('graphics', 'tx', 't8.jpg'))]
 SCREEN = Surface((WIDTH, HEIGTH))
+
 SPEED = {
     '0': 0,
     '1': 0.8,
@@ -26,9 +27,9 @@ SPEED = {
 
 class Head(sprite.Sprite):
     def __init__(self, x, y):
-        self.xpos = x
-        self.ypos = y
-        self.bitmap = pygame.image.load(os.path.join('graphics','headup.png'))
+        self.xpos = 1000
+        self.ypos = 500
+        self.image = pygame.image.load(os.path.join('graphics', 'headup.png'))
         self.rect = Rect(x, y, 60,60)
         self.limits = {'x': 1, 'y': 1}
         self.vector = 'right'
@@ -61,26 +62,26 @@ class Head(sprite.Sprite):
 
     def go_down(self):
         self.ypos += SPEED['5']
-        self.bitmap = pygame.image.load(os.path.join('graphics','headdown.png'))
+        self.image = pygame.image.load(os.path.join('graphics', 'headdown.png'))
         self.check_position()
 
     def go_up(self):
         self.ypos -= SPEED['5']
-        self.bitmap = pygame.image.load(os.path.join('graphics','headup.png'))
+        self.image = pygame.image.load(os.path.join('graphics', 'headup.png'))
         self.check_position()
 
     def go_left(self):
         self.xpos -= SPEED['5']
-        self.bitmap = pygame.image.load(os.path.join('graphics','headleft.png'))
+        self.image = pygame.image.load(os.path.join('graphics', 'headleft.png'))
         self.check_position()
 
     def go_right(self):
         self.xpos += SPEED['5']
-        self.bitmap = pygame.image.load(os.path.join('graphics','headright.png'))
+        self.image = pygame.image.load(os.path.join('graphics', 'headright.png'))
         self.check_position()
 
-    def render(self):
-        SCREEN.blit(self.bitmap, (self.xpos, self.ypos))
+    def draw(self, screen):
+        screen.blit(self.image, (self.xpos, self.ypos))
 
 
 class Body(sprite.Sprite):
@@ -88,8 +89,7 @@ class Body(sprite.Sprite):
     def __init__(self):
         self.xpos = 0
         self.ypos = 0
-
-
+        self.image = pygame.image.load(os.path.join('graphics', 'section.png'))
 
 
 class Food(sprite.Sprite):
