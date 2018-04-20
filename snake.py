@@ -25,10 +25,19 @@ SPEED = {
     '5': 3}
 
 
+class Snake(sprite.Sprite):
+    def __init__(self):
+        sprite.Sprite.__init__(self)
+        self.head = Head(1000, 500)
+        self.body = []
+        self.tail = 0
+
+
 class Head(sprite.Sprite):
     def __init__(self, x, y):
-        self.xpos = 1000
-        self.ypos = 500
+        sprite.Sprite.__init__(self)
+        self.xpos = x
+        self.ypos = y
         self.image = pygame.image.load(os.path.join('graphics', 'headup.png'))
         self.rect = Rect(x, y, 60,60)
         self.limits = {'x': 1, 'y': 1}
@@ -82,28 +91,3 @@ class Head(sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, (self.xpos, self.ypos))
-
-
-class Body(sprite.Sprite):
-
-    def __init__(self):
-        self.xpos = 0
-        self.ypos = 0
-        self.image = pygame.image.load(os.path.join('graphics', 'section.png'))
-
-
-class Food(sprite.Sprite):
-
-    food = dict()
-
-    def __init__(self):
-        self.xpos = randint(40, WIDTH-40)
-        self.ypos = randint(40, HEIGTH-40)
-        self.type = 0
-        self.color = (randint(0, 255), randint(0, 255), randint(0, 255))
-        self.image = pygame.Surface((40, 40))
-
-    def draw(self):
-        self.image.fill(self.color)
-        SCREEN.blit(self.image, (self.xpos, self.ypos))
-

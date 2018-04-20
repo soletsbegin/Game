@@ -1,6 +1,7 @@
 import pygame
-from objects import *
+from snake import *
 from screen import *
+from food import *
 import sys
 
 food = []
