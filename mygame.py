@@ -29,20 +29,20 @@ def eat():
 
 def action():
     if key[pygame.K_DOWN]:
-        head.go_down()
+        head.change_vector('down')
     if key[pygame.K_UP]:
-        head.go_up()
+        head.change_vector('up')
     if key[pygame.K_LEFT]:
-        head.go_left()
+        head.change_vector('left')
     if key[pygame.K_RIGHT]:
-        head.go_right()
+        head.change_vector('right')
     if key[pygame.K_ESCAPE]:
         pygame.quit()
 
 
 pygame.init()
 
-window = pygame.display.set_mode((1024, 768), 0, 32)
+window = pygame.display.set_mode((WIDTH, HEIGTH), 0, 32)
 pygame.display.set_caption('Hungry Snake')
 
 game = True
@@ -53,7 +53,9 @@ while game:
         if e.type == pygame.QUIT:
             game = False
     key = pygame.key.get_pressed()
+
     action()
+    head.move()
 
     if eat():
         scores += 1
