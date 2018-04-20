@@ -1,10 +1,15 @@
 import pygame
 from objects import *
+from screen import *
+import sys
 
-BACKGROUND_COLOR = (34, 139, 34)
+food = []
+body = []
+scores = 0
+head = Head(500, 300)
 
 
-def Intersect(obj1, obj2):
+def intersect(obj1, obj2):
     s1_x, s1_y = obj1.xpos, obj1.ypos
     s2_x, s2_y = obj2.xpos, obj2.ypos
     if (s1_x > s2_x - 40) and (s1_x < s2_x + 40) and (s1_y > s2_y - 40) and (s1_y < s2_y + 40):
@@ -13,33 +18,54 @@ def Intersect(obj1, obj2):
         return 0
 
 
-def move():
+def eat():
+    if len(food):
+        for f in range(len(food)):
+            if intersect(head, food[f]):
+                food.remove(food[f])
+                return True
+
+
+def action():
     if key[pygame.K_DOWN]:
-        head.go_down()
+        head.change_vector('down')
     if key[pygame.K_UP]:
-        head.go_up()
+        head.change_vector('up')
     if key[pygame.K_LEFT]:
-        head.go_left()
+        head.change_vector('left')
     if key[pygame.K_RIGHT]:
-        head.go_right()
+        head.change_vector('right')
+    if key[pygame.K_ESCAPE]:
+        sys.exit()
+
 
 pygame.init()
-
-window = pygame.display.set_mode((1024, 768), 0, 32)
-pygame.display.set_caption('Hungry Snake')
-key = pygame.key.get_pressed()
-
-
-head = Head(500, 300)
 game = True
+count = 0
 
 while game:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             game = False
-    move()
+    key = pygame.key.get_pressed()
+
+    action()
+    head.move()
+
+    if eat():
+        scores += 1
+        body.append(Body())
+
+    count += 1
+    if count % 1000 == 0:
+        food.append(Food())
 
     SCREEN.fill(BACKGROUND_COLOR)
-    head.render()
+    head.draw(SCREEN)
+    for f in food:
+        f.draw()
     window.blit(SCREEN, (0, 0))
-    pygame.display.flip()
+    pygame.display.update()
+
+
+print(scores)
