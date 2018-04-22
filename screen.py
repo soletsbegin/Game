@@ -15,5 +15,5 @@ TEXTURES =[pygame.image.load(os.path.join('graphics', 'tx', 't1.jpg')),
            pygame.image.load(os.path.join('graphics', 'tx', 't8.jpg'))]
 SCREEN = Surface((WIDTH, HEIGHT))
 
-window = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
+window = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN, 32)
 pygame.display.set_caption('Hungry Snake')
