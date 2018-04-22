@@ -25,7 +25,7 @@ def intersect(obj1, obj2):
 class Snake():
     def __init__(self):
         self.head = Head(1000, 500)
-        self.body = [self.head,
+        self.body = [CheckPoint(1000, 500, 1, 1),
                      Section(self.head.xpos, self.head.ypos),
                      Section(self.head.xpos, self.head.ypos),
                      Section(self.head.xpos, self.head.ypos),
@@ -36,7 +36,7 @@ class Snake():
             s.draw(screen)
 
     def add_sect(self):
-        self.body.insert(1, Section(self.head.xpos, self.head.ypos))
+        self.body.insert(-1, Section(self.head.xpos, self.head.ypos))
 
     def turn(self, action):
         self.head.change_vector(action)
@@ -44,15 +44,15 @@ class Snake():
     def change_condition(self):
         temp = [(s.xpos, s.ypos, s.vector) for s in self.body]
         self.head.move()
+        self.body[0].change_pos(self.head)
         for s in range(1, len(self.body)):
             self.body[s].xpos = temp[s-1][0]
             self.body[s].ypos = temp[s-1][1]
             self.body[s].change_vector(temp[s-1][2])
 
-    def intersect1(self):
-        for s in range(3, len(self.body):
-            if intersect(self.head, self.body[s]):
-
+    # def intersect1(self):
+    #     for s in range(3, len(self.body):
+    #         if intersect(self.head, self.body[s]):
 
 
 class Head(sprite.Sprite):
@@ -67,13 +67,13 @@ class Head(sprite.Sprite):
 
     def check_position(self):
         if self.xpos > WIDTH:
-            self.xpos = 5
-        if self.xpos < -60:
-            self.xpos = WIDTH-5
+            self.xpos = 0
+        if self.xpos < -50:
+            self.xpos = WIDTH
         if self.ypos > HEIGHT:
-            self.ypos = 5
-        if self.ypos < -60:
-            self.ypos = HEIGHT-5
+            self.ypos = 100
+        if self.ypos < 50:
+            self.ypos = HEIGHT
 
     def change_vector(self, action):
         if action == 'right' and self.vector != 'left': self.vector = 'right'
@@ -156,3 +156,32 @@ class Tail(sprite.Sprite):
         if action == 'up':
             self.image = pygame.image.load(os.path.join('graphics', 'endup.png'))
             self.vector = 'up'
+
+
+class CheckPoint():
+    def __init__(self, x, y, w, h):
+        self.xpos = x
+        self.ypos = y
+        self.vector = 'right'
+        self.image = pygame.Surface((w, h))
+
+    def change_pos(self, obj):
+        if obj.vector == 'up':
+            self.xpos = obj.xpos+5
+            self.ypos = obj.ypos+10
+            self.vector = obj.vector
+        if obj.vector == 'down':
+            self.xpos = obj.xpos+5
+            self.ypos = obj.ypos
+            self.vector = obj.vector
+        if obj.vector == 'left':
+            self.xpos = obj.xpos+10
+            self.ypos = obj.ypos+5
+            self.vector = obj.vector
+        if obj.vector == 'right':
+            self.xpos = obj.xpos
+            self.ypos = obj.ypos+5
+            self.vector = obj.vector
+
+    def draw(self, screen):
+        pass

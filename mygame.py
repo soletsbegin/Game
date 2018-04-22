@@ -7,7 +7,7 @@ import sys
 body = []
 scores = 0
 snake = Snake()
-screen = Screen()
+bar = Bar(0, 0, WIDTH, 100, COLORS['grey'])
 
 
 def eat():
@@ -31,9 +31,21 @@ def action():
         sys.exit()
 
 
+def update_all():
+    SCREEN.fill(COLORS['white'])
+    snake.draw(SCREEN)
+
+    for f in food:
+        f.draw()
+    snake.head.draw(SCREEN)
+    bar.draw(SCREEN)
+    window.blit(SCREEN, (0, 0))
+    pygame.display.update()
+
+
 pygame.init()
 game = True
-speed = 8
+speed = 10
 count = 0
 timer = pygame.time.Clock()
 
@@ -59,11 +71,4 @@ while game:
     # if count > 10:
     #     if snake.intersect(): sys.exit()
 
-    SCREEN.fill(BACKGROUND_COLOR)
-    screen.draw(SCREEN)
-    snake.draw(SCREEN)
-    for f in food:
-        f.draw()
-
-    window.blit(SCREEN, (0, 0))
-    pygame.display.update()
+    update_all()
