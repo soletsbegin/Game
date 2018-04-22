@@ -30,9 +30,6 @@ class Snake():
                      Section(self.head.xpos, self.head.ypos),
                      Section(self.head.xpos, self.head.ypos),
                      Tail(self.head.xpos, self.head.ypos)]
-        self.group = pygame.sprite.Group()
-        for s in range(2, len(self.body)):
-            self.group.add(self.body[s])
 
     def draw(self, screen):
         for s in reversed(self.body):
@@ -52,9 +49,10 @@ class Snake():
             self.body[s].ypos = temp[s-1][1]
             self.body[s].change_vector(temp[s-1][2])
 
-    def intersect(self):
-        for s in self.group:
-            if sprite.spritecollide(self.head, self.group, 0): return True
+    def intersect1(self):
+        for s in range(3, len(self.body):
+            if intersect(self.head, self.body[s]):
+
 
 
 class Head(sprite.Sprite):
@@ -69,13 +67,13 @@ class Head(sprite.Sprite):
 
     def check_position(self):
         if self.xpos > WIDTH:
-            self.xpos = 0
+            self.xpos = 5
         if self.xpos < -60:
-            self.xpos = WIDTH
+            self.xpos = WIDTH-5
         if self.ypos > HEIGHT:
-            self.ypos = 0
+            self.ypos = 5
         if self.ypos < -60:
-            self.ypos = HEIGHT
+            self.ypos = HEIGHT-5
 
     def change_vector(self, action):
         if action == 'right' and self.vector != 'left': self.vector = 'right'

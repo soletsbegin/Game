@@ -3,7 +3,9 @@ import pygame
 from random import randint
 
 food = []
-
+pics = ['1.png',
+        '2.png',
+        '3.png']
 
 class Food(sprite.Sprite):
 
@@ -13,8 +15,8 @@ class Food(sprite.Sprite):
         self.ypos = randint(40, HEIGHT - 40)
         self.type = 0
         self.color = (randint(0, 255), randint(0, 255), randint(0, 255))
-        self.image = pygame.Surface((40, 40))
+        self.image = pygame.image.load(os.path.join('graphics', 'food', pics[randint(0, len(pics)-1)]))
 
     def draw(self):
-        self.image.fill(self.color)
+        # self.image.fill(self.color)
         SCREEN.blit(self.image, (self.xpos, self.ypos))
