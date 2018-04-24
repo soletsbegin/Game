@@ -1,4 +1,3 @@
-import pygame
 from pygame import *
 import os
 from random import randint
@@ -13,8 +12,8 @@ COLORS = {
     'red': (255, 0, 0),
     'grey': (96, 96, 96)
 }
-WIDTH = 1024
-HEIGHT = 768
+WIDTH = 1600
+HEIGHT = 1200
 TEXTURES =[pygame.image.load(os.path.join('graphics', 'tx', 't1.png')),
            pygame.image.load(os.path.join('graphics', 'tx', 't2.png')),
            pygame.image.load(os.path.join('graphics', 'tx', 't3.jpg')),

@@ -1,8 +1,7 @@
-import pygame
-from snake import *
-from screen import *
-from food import *
 import sys
+from snake import *
+from food import *
+from screen import *
 
 body = []
 scores = 0
@@ -26,17 +25,19 @@ def action():
         snake.turn('left')
     if key[pygame.K_RIGHT]:
         snake.turn('right')
+    if key[pygame.K_SPACE]:
+        snake.change_condition()
     if key[pygame.K_ESCAPE]:
         print(scores)
         sys.exit()
 
 
 def update_all():
-    SCREEN.fill(COLORS['white'])
+    SCREEN.fill(COLORS['black'])
     snake.draw(SCREEN)
 
     for f in food:
-        f.draw()
+        f.draw(SCREEN)
     snake.head.draw(SCREEN)
     bar.draw(SCREEN)
     window.blit(SCREEN, (0, 0))
@@ -45,7 +46,7 @@ def update_all():
 
 pygame.init()
 game = True
-speed = 10
+speed = 5
 count = 0
 timer = pygame.time.Clock()
 
@@ -54,6 +55,7 @@ while game:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             game = False
+
     key = pygame.key.get_pressed()
 
     action()
@@ -68,7 +70,8 @@ while game:
         snake.add_sect()
         scores += 1
 
-    # if count > 10:
-    #     if snake.intersect(): sys.exit()
+    if snake.intersect1():
+        sys.exit()
+
 
     update_all()
