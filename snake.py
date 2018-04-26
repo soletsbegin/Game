@@ -6,7 +6,7 @@ SPEED = {
     '1': 0.8,
     '2': 1,
     '3': 1.5,
-    '4': 2.2,
+    '4': 20,
     '5': 40}
 
 
@@ -17,6 +17,9 @@ def intersect(obj1, obj2):
 
 
 class Snake():
+    """
+    Змея в целом.
+    """
     def __init__(self):
         self.head = Head(0, 360)
         self.body = [CheckPoint(0, 360, 1, 1),
@@ -31,12 +34,22 @@ class Snake():
             s.draw(screen)
 
     def add_sect(self):
+        """
+        Add sectors in the list(self.body).
+        """
         self.body.append(Section(self.head.xpos-1, self.head.ypos-1))
 
     def turn(self, action):
+        """
+        This method change direction of the first element of snake.
+        """
         self.head.change_vector(action)
 
     def change_condition(self):
+        """
+        Main method of snakes move.
+        Moves each next segment to the position of the previous.
+        """
         temp = [(s.xpos, s.ypos, s.vector) for s in self.body]
         self.head.move()
         self.body[0].change_pos(self.head)
@@ -46,9 +59,12 @@ class Snake():
             self.body[s].change_vector(temp[s-1][2])
 
     def intersect1(self):
+        """Check intersection of the  Head with other sections.
+
+        """
         for b in range(1, len(self.body)):
             if intersect(self.head, self.body[b]):
-                self.body[b].color = (100, 100, 100)
+                self.body = self.body[0:b]
                 return True
 
 
@@ -57,8 +73,7 @@ class Head(sprite.Sprite):
         sprite.Sprite.__init__(self)
         self.xpos = x
         self.ypos = y
-        # self.image = pygame.Surface((40, 40))
-        self.image = pygame.image.load(os.path.join('graphics', 'h_r.png'))
+        self.image = pygame.image.load(os.path.join('graphics', 'head.png'))
         self.rect = Rect(self.xpos, self.ypos, 40, 40)
         self.limits = {'x': 1, 'y': 1}
         self.vector = 'right'
@@ -66,25 +81,25 @@ class Head(sprite.Sprite):
     def check_position(self):
         if self.xpos > WIDTH:
             self.xpos = 0
-        if self.xpos < -50:
+        if self.xpos < 0:
             self.xpos = WIDTH
         if self.ypos > HEIGHT:
-            self.ypos = 100
-        if self.ypos < 50:
+            self.ypos = 120
+        if self.ypos < 120:
             self.ypos = HEIGHT
 
     def change_vector(self, action):
         if action == 'right' and self.vector != 'left' and self.vector != 'right':
             self.vector = 'right'
-            self.image = pygame.image.load(os.path.join('graphics', 'h_r.png'))
+            self.image = pygame.image.load(os.path.join('graphics', 'head.png'))
         elif action == 'left' and self.vector != 'right' and self.vector != 'left':
-            self.image = pygame.image.load(os.path.join('graphics', 'h_l.png'))
+            self.image = pygame.image.load(os.path.join('graphics', 'head.png'))
             self.vector = 'left'
         elif action == 'down' and self.vector != 'up' and self.vector != 'down':
-            self.image = pygame.image.load(os.path.join('graphics', 'h_d.png'))
+            self.image = pygame.image.load(os.path.join('graphics', 'head.png'))
             self.vector = 'down'
         elif action == 'up' and self.vector != 'down' and self.vector != 'up':
-            self.image = pygame.image.load(os.path.join('graphics', 'h_up.png'))
+            self.image = pygame.image.load(os.path.join('graphics', 'head.png'))
             self.vector = 'up'
         else: return False
 
@@ -114,7 +129,6 @@ class Section(sprite.Sprite):
         self.vector = 'right'
         self.color = COLORS['blue']
         self.rect = Rect(x, y, 40, 40)
-        # self.image = pygame.Surface((40, 40))
         self.image = pygame.image.load(os.path.join('graphics', 'sect.png'))
 
     def draw(self, screen):
@@ -123,16 +137,12 @@ class Section(sprite.Sprite):
 
     def change_vector(self, action):
         if action == 'right':
-            # self.image = pygame.image.load(os.path.join('graphics', 'sectionright.png'))
             self.vector = 'right'
         if action == 'left':
-            # self.image = pygame.image.load(os.path.join('graphics', 'sectionleft.png'))
             self.vector = 'left'
         if action == 'down':
-            # self.image = pygame.image.load(os.path.join('graphics', 'sectiondown.png'))
             self.vector = 'down'
         if action == 'up':
-            # self.image = pygame.image.load(os.path.join('graphics', 'sectionup.png'))
             self.vector = 'up'
 
 
@@ -144,7 +154,6 @@ class Tail(sprite.Sprite):
         self.vector = 'right'
         self.rect = Rect(x, y, 40, 40)
         self.image = pygame.Surface((40, 40))
-        # self.image = pygame.image.load(os.path.join('graphics', 'end.png'))
 
     def draw(self, screen):
         self.image.fill(COLORS['blue'])
