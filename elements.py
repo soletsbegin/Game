@@ -1,33 +1,33 @@
+import os
+
 import pygame
-import os.path
-from screen import *
-from snake import *
-
-NUMBERS = {'0': pygame.image.load(os.path.join('graphics', 'numb', '0.png')),
-           '1': pygame.image.load(os.path.join('graphics', 'numb', '1.png')),
-           '2': pygame.image.load(os.path.join('graphics', 'numb', '2.png')),
-           '3': pygame.image.load(os.path.join('graphics', 'numb', '3.png')),
-           '4': pygame.image.load(os.path.join('graphics', 'numb', '4.png')),
-           '5': pygame.image.load(os.path.join('graphics', 'numb', '5.png')),
-           '6': pygame.image.load(os.path.join('graphics', 'numb', '6.png')),
-           '7': pygame.image.load(os.path.join('graphics', 'numb', '7.png')),
-           '8': pygame.image.load(os.path.join('graphics', 'numb', '8.png')),
-           '9': pygame.image.load(os.path.join('graphics', 'numb', '9.png')),
-           }
 
 
-class Bar():
-    """
-    Любой элемент который не меняет свое положение.
-    """
+NUMBERS = {
+    '0': pygame.image.load(os.path.join('graphics', 'numb', '0.png')),
+    '1': pygame.image.load(os.path.join('graphics', 'numb', '1.png')),
+    '2': pygame.image.load(os.path.join('graphics', 'numb', '2.png')),
+    '3': pygame.image.load(os.path.join('graphics', 'numb', '3.png')),
+    '4': pygame.image.load(os.path.join('graphics', 'numb', '4.png')),
+    '5': pygame.image.load(os.path.join('graphics', 'numb', '5.png')),
+    '6': pygame.image.load(os.path.join('graphics', 'numb', '6.png')),
+    '7': pygame.image.load(os.path.join('graphics', 'numb', '7.png')),
+    '8': pygame.image.load(os.path.join('graphics', 'numb', '8.png')),
+    '9': pygame.image.load(os.path.join('graphics', 'numb', '9.png')),
+}
+
+
+class Bar:
+    """Любой элемент."""
     def __init__(self, x, y, w, h, color, path=None):
             self.xpos = x
             self.ypos = y
             self.color = color
-            if path == None:
+            self._start = False
+            if path is None:
                 self.path = False
                 self.image = pygame.Surface((w, h))
-            elif path != None:
+            elif path is not None:
                 self.path = True
                 self.image = pygame.image.load(path)
 
@@ -38,11 +38,16 @@ class Bar():
             self.image.fill(self.color)
             screen.blit(self.image, (self.xpos, self.ypos))
 
-    def move(self):
-        self.ypos -= 40
+    def get_start(self):
+        self._start = True
+
+    def move(self, speed):
+        if self._start:
+            self.ypos += speed
+            return True
 
 
-class Number():
+class Number:
     """
     Цифровая панель.
     """
@@ -57,16 +62,22 @@ class Number():
         self.image2.set_colorkey((0, 0, 0))
         self.image3.set_colorkey((0, 0, 0))
 
-    def change_num(self, float):
+    def change_num(self, scores):
         """
 
         """
         try:
-            first, second, third = str(float)[0], str(float)[2], str(float)[3]
+            first, second, third = str(scores)[0], str(scores)[2], str(scores)[3]
             self.image1 = NUMBERS[first]
             self.image2 = NUMBERS[second]
             self.image3 = NUMBERS[third]
-        except IndexError: pass
+        except IndexError:
+            pass
+
+    def show_final(self):
+        self.pos1 = (400, 650)
+        self.pos2 = (480, 650)
+        self.pos3 = (560, 650)
 
     def draw(self, screen):
         screen.blit(self.image1, self.pos1)
@@ -74,20 +85,11 @@ class Number():
         screen.blit(self.image3, self.pos3)
 
 
-class Text():
-    """
-    Любой элемент который не меняет свое положение.
-    """
-
+class Text:
     def __init__(self, x, y, path):
-        self.xpos = x
-        self.ypos = y
+        self._xpos = x
+        self._ypos = y
         self.image = pygame.image.load(path)
 
     def draw(self, screen):
-        screen.blit(self.image, (self.xpos, self.ypos))
-
-
-if __name__ ==  "__main__":
-    import doctest
-    doctest.testmod()
+        screen.blit(self.image, (self._xpos, self._ypos))
