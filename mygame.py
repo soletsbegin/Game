@@ -1,66 +1,46 @@
-import sys
-import os.path
-from snake import *
-from food import *
-from screen import *
+import time
+from act import *
+# from mainvars import *
+from mainvars import snake, scores_in_game, title, bar, text_scores, life, go, window
+from mainvars import COLORS
+from snake import intersect
+from food import food
+from food import Food
 
-body = []
-snake = Snake()
-bar = Bar(0, 0, WIDTH, 120, COLORS['grey'])
-title = Bar(0, 0, 0, 0, 0, os.path.join('graphics', 'title.png'))
-scr1 = Bar(0, 120, WIDTH, HEIGHT-120, COLORS['black'])
-scr2 = Bar(0, 999, WIDTH, HEIGHT-120, COLORS['black'])
-go = Bar(0, 0, 0, 0, 0, os.path.join('graphics', 'go.png'))
-fin_scores = Number(WIDTH-250, 1000, WIDTH-170, 1000, WIDTH-90, 1000)
-life = [Bar(78, 18, 164, 84, COLORS['black']),
-        Bar(80, 20, 40, 80, COLORS['red_num']),
-        Bar(140, 20, 40, 80, COLORS['red_num']),
-        Bar(200, 20, 40, 80, COLORS['red_num']),]
-numb = Number(WIDTH-250, 10, WIDTH-170, 10, WIDTH-90, 10)
-t_scores = Text(WIDTH-800, 10, os.path.join('graphics', 'numb', 'scor.png'))
-timer = pygame.time.Clock()
-game_speed = 20
+
+def save_res(scores):
+    file = open('results.txt')
+    text = file.readlines()
+    file.close()
+    t = time.ctime().split(' ')
+    text.append('{} ({} {} {})\n'.format(scores, ' '.join(t[3:4]), t[1], t[2]))
+    with open('results.txt', 'w') as file:
+        file.write(''.join(reversed(sorted(text))))
 
 
 def eat():
     for f in range(len(food)):
-        if intersect(snake.head, food[f]):
+        if intersect(m.snake.head, food[f]):
             food.remove(food[f])
             return True
 
 
 def add_food():
     if len(food) < 3:
-        while True:
-            f = Food()
-            for b in snake.body:
-                if f.ypos != b.ypos and f.xpos != b.xpos:
-                    food.append(f)
-                    return True
+        count = 0
+        f = Food()
+        for b in snake.body:
+            if f.ypos == b.ypos and f.xpos == b.xpos:
+                count += 1
+        if count == 0:
+            food.append(f)
 
 
-def action(game = True):
-    key = pygame.key.get_pressed()
-    if game:
-        if key[pygame.K_DOWN]:
-            snake.turn('down')
-        if key[pygame.K_UP]:
-            snake.turn('up')
-        if key[pygame.K_LEFT]:
-            snake.turn('left')
-        if key[pygame.K_RIGHT]:
-            snake.turn('right')
-        if key[pygame.K_ESCAPE]:
-            sys.exit()
-        if key[pygame.K_SPACE]:
-            game_loop()
-
-
-def update_all():
+def game_update():
     SCREEN.fill(COLORS['black'])
     bar.draw(SCREEN)
-    numb.draw(SCREEN)
-    t_scores.draw(SCREEN)
+    scores_in_game.draw(SCREEN)
+    text_scores.draw(SCREEN)
     snake.draw(SCREEN)
     for f in food:
         f.draw(SCREEN)
@@ -72,76 +52,57 @@ def update_all():
 
 
 def game_loop():
-
-    scores = 0.00
-    speed = 7
+    timer = pygame.time.Clock()
+    scores = 0
+    speed = 5
     count = 0
     while True:
         timer.tick(speed)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 sys.exit()
-        action(True)
+        game_action()
         snake.change_condition()
         count += 1
         add_food()
         if eat():
             if len(snake.body) % 10 == 0:
-                speed += 0.5
+                speed += 1
             snake.add_sect()
-            scores += 0.01
-        numb.change_num(scores)
+            scores += round((len(snake.body))/5)
+        scores_in_game.change_num(scores/100)
         if snake.intersect1():
             life.pop()
-            if len(life) == 1:
-                game_over(scores)
-        update_all()
-        action()
+            if len(life) < 1:
+                save_res(scores)
+                g_o_loop()
+        game_update()
+        game_action()
 
 
-def start_loop():
+def menu_loop():
+    speed = 20
     while True:
-        timer.tick(20)
-        SCREEN.fill(COLORS['black'])
-        bar.draw(SCREEN)
-        numb.draw(SCREEN)
-        for l in life:
-            l.draw(SCREEN)
-        scr1.draw(SCREEN)
-        title.draw(SCREEN)
+        menu_action()
+        if title.move(speed):
+            speed += 5
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 sys.exit()
-        action()
-        window.blit(SCREEN, (0, 0))
-        pygame.display.update()
-
-
-def game_over(scores):
-    timer = pygame.time.Clock()
-    numb.change_num(0)
-    numb.draw(SCREEN)
-    fin_scores.change_num(scores)
-    while True:
-        timer.tick(20)
-        go.draw(SCREEN)
-        fin_scores.draw(SCREEN)
-        numb.draw(SCREEN)
-        bar.draw(SCREEN)
-        t_scores.draw(SCREEN)
-        for l in life:
-            l.draw(SCREEN)
-        for e in pygame.event.get():
-            if e.type == pygame.QUIT:
-                sys.exit()
-        key = pygame.key.get_pressed()
-        if key[pygame.K_SPACE]:
+        if title.ypos > 1600:
             break
-        window.blit(SCREEN, (0, 0))
-        pygame.display.update()
+        menu_update()
 
 
+def g_o_loop():
+    while True:
+        menu_action()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                sys.exit()
+        g_o_update()
 
-if __name__ == "__main__":
-    pygame.init()
-    game_loop()
+
+pygame.init()
+menu_loop()
+game_loop()
