@@ -1,7 +1,8 @@
+import os
 import pygame
-from elements import *
+from elements import Bar, Number, Text
 from snake import Snake
-
+from level import Level, LevelPng
 
 BACKGROUND_COLOR = (34, 139, 34)
 COLORS = {
@@ -33,9 +34,13 @@ life = [Bar(80, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
 
 
 title = Bar(0, 0, 0, 0, 0, os.path.join('graphics', 'title.png'))
-scr1 = Bar(0, 0, WIDTH, HEIGHT-120, COLORS['black'])
+arrow_l = Bar(100, 700, 0, 0, 0, os.path.join('graphics', 'arr_l.png'))
+arrow_r = Bar(1400, 700, 0, 0, 0, os.path.join('graphics', 'arr_r.png'))
+menu_level = LevelPng()
 
 go = Bar(0, 0, 0, 0, 0, os.path.join('graphics', 'go.png'))
 
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Hungry Snake')
+
+level = Level()

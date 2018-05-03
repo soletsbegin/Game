@@ -1,8 +1,7 @@
 import time
+
 from act import *
-# from mainvars import *
-from mainvars import snake, scores_in_game, title, bar, text_scores, life, go, window
-from mainvars import COLORS
+from mainvars import snake, scores_in_game, title, life, level, menu_level
 from snake import intersect
 from food import food
 from food import Food
@@ -13,7 +12,7 @@ def save_res(scores):
     text = file.readlines()
     file.close()
     t = time.ctime().split(' ')
-    text.append('{} ({} {} {})\n'.format(scores, ' '.join(t[3:4]), t[1], t[2]))
+    text.append('{} ({})\n'.format(scores, ' '.join(t)))
     with open('results.txt', 'w') as file:
         file.write(''.join(reversed(sorted(text))))
 
@@ -25,30 +24,23 @@ def eat():
             return True
 
 
+def snake_on_block():
+    for b in level.blocks:
+        if intersect(snake.head, b):
+            return True
+
+
+def check_food():
+    for b in level.blocks:
+        for f in food:
+            if intersect(b,f):
+                food.remove(f)
+
+
 def add_food():
     if len(food) < 3:
-        count = 0
         f = Food()
-        for b in snake.body:
-            if f.ypos == b.ypos and f.xpos == b.xpos:
-                count += 1
-        if count == 0:
-            food.append(f)
-
-
-def game_update():
-    SCREEN.fill(COLORS['black'])
-    bar.draw(SCREEN)
-    scores_in_game.draw(SCREEN)
-    text_scores.draw(SCREEN)
-    snake.draw(SCREEN)
-    for f in food:
-        f.draw(SCREEN)
-    snake.head.draw(SCREEN)
-    for l in life:
-        l.draw(SCREEN)
-    window.blit(SCREEN, (0, 0))
-    pygame.display.update()
+        food.append(f)
 
 
 def game_loop():
@@ -56,8 +48,8 @@ def game_loop():
     scores = 0
     speed = 5
     count = 0
+    level.choose_level(menu_level.current_l+1)
     while True:
-        timer.tick(speed)
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 sys.exit()
@@ -65,24 +57,31 @@ def game_loop():
         snake.change_condition()
         count += 1
         add_food()
+        check_food()
         if eat():
             if len(snake.body) % 10 == 0:
                 speed += 1
             snake.add_sect()
             scores += round((len(snake.body))/5)
         scores_in_game.change_num(scores/100)
+        if snake_on_block():
+            save_res(scores)
+            g_o_loop()
         if snake.intersect1():
             life.pop()
             if len(life) < 1:
                 save_res(scores)
-                g_o_loop()
+                break
         game_update()
+        timer.tick(speed)
         game_action()
 
 
 def menu_loop():
-    speed = 20
+    timer = pygame.time.Clock()
+    speed = 7
     while True:
+        timer.tick(speed)
         menu_action()
         if title.move(speed):
             speed += 5
@@ -96,13 +95,29 @@ def menu_loop():
 
 def g_o_loop():
     while True:
-        menu_action()
+        if g_o_action():
+            break
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 sys.exit()
         g_o_update()
 
 
-pygame.init()
-menu_loop()
-game_loop()
+def test_level_loop():
+    while True:
+        menu_action()
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                sys.exit()
+        level_update()
+
+
+def main():
+    while True:
+        pygame.init()
+        menu_loop()
+        game_loop()
+
+
+if __name__ == '__main__':
+    main()

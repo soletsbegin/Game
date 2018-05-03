@@ -18,7 +18,6 @@ NUMBERS = {
 
 
 class Bar:
-    """Любой элемент."""
     def __init__(self, x, y, w, h, color, path=None):
             self.xpos = x
             self.ypos = y
@@ -75,6 +74,11 @@ class Number:
             pass
 
     def show_final(self):
+        self.pos1 = (400, 650)
+        self.pos2 = (480, 650)
+        self.pos3 = (560, 650)
+
+    def reset(self):
         self.pos1 = (400, 650)
         self.pos2 = (480, 650)
         self.pos3 = (560, 650)
