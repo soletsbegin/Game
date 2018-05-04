@@ -1,4 +1,5 @@
 import time
+import os
 
 from act import *
 from mainvars import snake, scores_in_game, title, life, level, menu_level
@@ -6,15 +7,17 @@ from snake import intersect
 from food import food
 from food import Food
 
+scores = 0
 
-def save_res(scores):
-    file = open('results.txt')
-    text = file.readlines()
-    file.close()
-    t = time.ctime().split(' ')
-    text.append('{} ({})\n'.format(scores, ' '.join(t)))
+
+def save_res(score):
+    if not'results.txt' in os.listdir('.'):
+        open('results.txt', 'w', encoding='utf-8').close()
     with open('results.txt', 'w') as file:
-        file.write(''.join(reversed(sorted(text))))
+        text = file.readlines()
+    t = time.ctime().split(' ')
+    text.append('{} ({})\n'.format(score, ' '.join(t)))
+    file.write(''.join(reversed(sorted(text, key=lambda x: x.split()[0]))))
 
 
 def eat():
@@ -43,9 +46,9 @@ def add_food():
         food.append(f)
 
 
-def game_loop():
+def game_loop(score):
     timer = pygame.time.Clock()
-    scores = 0
+    scores = score
     speed = 5
     count = 0
     level.choose_level(menu_level.current_l+1)
@@ -66,9 +69,9 @@ def game_loop():
         scores_in_game.change_num(scores/100)
         if snake_on_block():
             save_res(scores)
-            g_o_loop()
+            break
         if snake.intersect1():
-            life.pop()
+            life.life_pop()
             if len(life) < 1:
                 save_res(scores)
                 break
@@ -96,7 +99,7 @@ def menu_loop():
 def g_o_loop():
     while True:
         if g_o_action():
-            break
+            return True
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 sys.exit()
@@ -116,7 +119,12 @@ def main():
     while True:
         pygame.init()
         menu_loop()
-        game_loop()
+        game_loop(0)
+        if g_o_loop():
+            snake.reset()
+            scores_in_game.reset()
+            life.reset()
+            title.reset()
 
 
 if __name__ == '__main__':

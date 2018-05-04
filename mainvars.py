@@ -1,6 +1,6 @@
 import os
 import pygame
-from elements import Bar, Number, Text
+from elements import Bar, Number, Text, Life
 from snake import Snake
 from level import Level, LevelPng
 
@@ -20,6 +20,7 @@ HEIGHT = 1000
 SCREEN = pygame.Surface((WIDTH, HEIGHT))
 
 
+
 body = []
 snake = Snake()
 
@@ -27,10 +28,7 @@ bar = Bar(0, 0, WIDTH, 120, 0, os.path.join('graphics', 'bar.png'))
 scores_in_game = Number(WIDTH - 250, 10, WIDTH - 170, 10, WIDTH - 90, 10)
 text_scores = Text(WIDTH - 800, 10, os.path.join('graphics', 'numb', 'scor.png'))
 
-life = [Bar(80, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
-        Bar(150, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
-        Bar(220, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
-        ]
+life = Life()
 
 
 title = Bar(0, 0, 0, 0, 0, os.path.join('graphics', 'title.png'))

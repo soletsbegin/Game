@@ -23,7 +23,7 @@ def game_action():
 
 def menu_action():
     key = pygame.key.get_pressed()
-    if key[pygame.K_SPACE]:
+    if key[pygame.K_RETURN]:
         m.title.get_start()
     if key[pygame.K_LEFT]:
         m.menu_level.prev_level()
@@ -35,8 +35,6 @@ def menu_action():
 
 def g_o_action():
     key = pygame.key.get_pressed()
-    # if key[pygame.K_SPACE]:
-    #     m.title.get_start()
     if key[pygame.K_SPACE]:
         return True
     if key[pygame.K_ESCAPE]:
@@ -53,8 +51,7 @@ def game_update():
     m.snake.draw(SCREEN)
     m.snake.head.draw(SCREEN)
 
-    for l in m.life:
-        l.draw(SCREEN)
+    m.life.draw(SCREEN)
 
     m.level.draw(SCREEN)
     m.window.blit(SCREEN, (0, 0))
@@ -66,8 +63,7 @@ def menu_update():
     m.bar.draw(SCREEN)
     m.scores_in_game.draw(SCREEN)
     m.text_scores.draw(SCREEN)
-    for l in m.life:
-        l.draw(SCREEN)
+    m.life.draw(SCREEN)
     m.title.draw(SCREEN)
     m.arrow_l.draw(SCREEN)
     m.arrow_r.draw(SCREEN)
@@ -82,11 +78,9 @@ def g_o_update():
     m.text_scores.draw(SCREEN)
     m.level.draw(SCREEN)
     m.snake.draw(SCREEN)
-    for l in m.life:
-        l.draw(SCREEN)
-
+    m.life.draw(SCREEN)
     m.go.draw(SCREEN)
-    m.scores_in_game.show_final()
+    # m.scores_in_game.show_final()
     m.scores_in_game.draw(SCREEN)
 
     m.window.blit(SCREEN, (0, 0))

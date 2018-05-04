@@ -75,11 +75,16 @@ class Snake:
                 self.body = self.body[0:b]
                 return True
 
+    def reset(self):
+        self.head.reset()
+        self.body = self.body[:4]
+
 
 class Head:
     def __init__(self, x, y):
         self.xpos = x
         self.ypos = y
+        self.start = (x, y)
         self.image = pygame.image.load(os.path.join('graphics', 'head.png'))
         self.limits = {'x': 1, 'y': 1}
         self.vector = 'right'
@@ -123,6 +128,10 @@ class Head:
         if self.vector == 'up':
             self.ypos -= SPEED['5']
             self.check_position()
+
+    def reset(self):
+        self.xpos, self.ypos = self.start
+        self.vector = 'right'
 
     def draw(self, screen):
         screen.blit(self.image, (self.xpos, self.ypos))

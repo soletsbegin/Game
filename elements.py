@@ -40,6 +40,10 @@ class Bar:
     def get_start(self):
         self._start = True
 
+    def reset(self):
+        self.xpos, self.ypos = 0, 0
+        self._start = False
+
     def move(self, speed):
         if self._start:
             self.ypos += speed
@@ -79,9 +83,9 @@ class Number:
         self.pos3 = (560, 650)
 
     def reset(self):
-        self.pos1 = (400, 650)
-        self.pos2 = (480, 650)
-        self.pos3 = (560, 650)
+        self.image1 = pygame.image.load(os.path.join('graphics', 'numb', '0.png'))
+        self.image2 = pygame.image.load(os.path.join('graphics', 'numb', '0.png'))
+        self.image3 = pygame.image.load(os.path.join('graphics', 'numb', '0.png'))
 
     def draw(self, screen):
         screen.blit(self.image1, self.pos1)
@@ -97,3 +101,31 @@ class Text:
 
     def draw(self, screen):
         screen.blit(self.image, (self._xpos, self._ypos))
+
+
+class Life:
+    def __init__(self):
+        self._life_bar = [Bar(80, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
+                          Bar(150, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
+                          Bar(220, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
+                          ]
+
+    def __len__(self):
+        return len(self._life_bar)
+
+    def reset(self):
+        self._life_bar = [Bar(80, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
+                          Bar(150, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
+                          Bar(220, 20, 40, 80, 0, os.path.join('graphics', 'heart.png')),
+                          ]
+
+    def life_pop(self):
+        try:
+            self._life_bar.pop()
+        except IndexError:
+            self.reset()
+
+    def draw(self, screen):
+        for l in self._life_bar:
+            l.draw(screen)
+
