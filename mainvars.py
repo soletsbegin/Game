@@ -20,25 +20,31 @@ HEIGHT = 1000
 SCREEN = pygame.Surface((WIDTH, HEIGHT))
 
 
-
+# Snake
 body = []
 snake = Snake()
 
+# Score bar
 bar = Bar(0, 0, WIDTH, 120, 0, os.path.join('graphics', 'bar.png'))
 scores_in_game = Number(WIDTH - 250, 10, WIDTH - 170, 10, WIDTH - 90, 10)
 text_scores = Text(WIDTH - 800, 10, os.path.join('graphics', 'numb', 'scor.png'))
-
 life = Life()
 
-
+# Menu
 title = Bar(0, 0, 0, 0, 0, os.path.join('graphics', 'title.png'))
 arrow_l = Bar(100, 700, 0, 0, 0, os.path.join('graphics', 'arr_l.png'))
 arrow_r = Bar(1400, 700, 0, 0, 0, os.path.join('graphics', 'arr_r.png'))
 menu_level = LevelPng()
 
+# Game over
 go = Bar(0, 0, 0, 0, 0, os.path.join('graphics', 'go.png'))
+scores_back = Bar(1170, 500, 350, 370, COLORS['red_num'])
+# scores_back = Bar(1170, 500, 350, 370, COLORS['red_num'])
 
+
+# Maim screen
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Hungry Snake')
+
 
 level = Level()

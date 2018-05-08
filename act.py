@@ -1,5 +1,9 @@
-import pygame
+from time import sleep
 import sys
+
+
+import pygame
+
 import mainvars as m
 from mainvars import SCREEN
 from food import food
@@ -23,7 +27,9 @@ def game_action():
 
 def menu_action():
     key = pygame.key.get_pressed()
-    if key[pygame.K_RETURN]:
+    # if key[pygame.K_RETURN]:
+    #     m.title.get_start()
+    if key[pygame.K_SPACE]:
         m.title.get_start()
     if key[pygame.K_LEFT]:
         m.menu_level.prev_level()
@@ -35,7 +41,7 @@ def menu_action():
 
 def g_o_action():
     key = pygame.key.get_pressed()
-    if key[pygame.K_SPACE]:
+    if key[pygame.K_RETURN]:
         return True
     if key[pygame.K_ESCAPE]:
         sys.exit()
@@ -80,10 +86,10 @@ def g_o_update():
     m.snake.draw(SCREEN)
     m.life.draw(SCREEN)
     m.go.draw(SCREEN)
-    # m.scores_in_game.show_final()
     m.scores_in_game.draw(SCREEN)
+    m.scores_back.draw(SCREEN)
 
-    m.window.blit(SCREEN, (0, 0))
+    # m.window.blit(SCREEN, (0, 0))
     pygame.display.update()
 
 

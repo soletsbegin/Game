@@ -18,7 +18,7 @@ NUMBERS = {
 
 
 class Bar:
-    def __init__(self, x, y, w, h, color, path=None):
+    def __init__(self, x, y, w, h, color, path=None, transparent=False):
             self.xpos = x
             self.ypos = y
             self.color = color
@@ -29,6 +29,8 @@ class Bar:
             elif path is not None:
                 self.path = True
                 self.image = pygame.image.load(path)
+                if transparent:
+                    self.image.set_colorkey((255, 255, 255))
 
     def draw(self, screen):
         if self.path:
@@ -83,6 +85,9 @@ class Number:
         self.pos3 = (560, 650)
 
     def reset(self):
+        self.pos1 = (1600 - 250, 10)
+        self.pos2 = (1600 - 170, 10)
+        self.pos3 = (1600 - 90, 10)
         self.image1 = pygame.image.load(os.path.join('graphics', 'numb', '0.png'))
         self.image2 = pygame.image.load(os.path.join('graphics', 'numb', '0.png'))
         self.image3 = pygame.image.load(os.path.join('graphics', 'numb', '0.png'))
