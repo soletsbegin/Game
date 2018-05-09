@@ -27,8 +27,6 @@ def game_action():
 
 def menu_action():
     key = pygame.key.get_pressed()
-    # if key[pygame.K_RETURN]:
-    #     m.title.get_start()
     if key[pygame.K_SPACE]:
         m.title.get_start()
     if key[pygame.K_LEFT]:
@@ -41,7 +39,7 @@ def menu_action():
 
 def g_o_action():
     key = pygame.key.get_pressed()
-    if key[pygame.K_RETURN]:
+    if key[pygame.K_RETURN ]:
         return True
     if key[pygame.K_ESCAPE]:
         sys.exit()

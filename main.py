@@ -12,7 +12,12 @@ from fonts import list_scores_title_font, list_scores_font
 from food import food
 from food import Food
 
-scores = 0
+
+def make_scores_list(all_scores):
+    res = []
+    for i in all_scores:
+        res.append(int(i.split()[0]))
+    return sorted(res, reverse=True)
 
 
 def save_res(score):
@@ -30,7 +35,7 @@ def save_res(score):
     for line in text:
         file.write(line)
     file.close()
-    return sorted(text, reverse=True)
+    return make_scores_list(text)[0:3]
 
 
 def eat():
@@ -49,7 +54,7 @@ def snake_on_block():
 def check_food():
     for b in level.blocks:
         for f in food:
-            if intersect(b,f):
+            if intersect(b, f):
                 food.remove(f)
 
 
@@ -59,14 +64,10 @@ def add_food():
         food.append(f)
 
 
-def show_text():
-    pass
-
-
-def game_loop(score):
+def game_loop(score=0):
     timer = pygame.time.Clock()
-    scores = score
-    speed = 5
+    this_scores = score
+    speed = 8
     count = 0
     level.choose_level(menu_level.current_l+1)
     while True:
@@ -82,14 +83,14 @@ def game_loop(score):
             if len(snake.body) % 10 == 0:
                 speed += 1
             snake.add_sect()
-            scores += round((len(snake.body))/5)
-        scores_in_game.change_num(scores/100)
+            this_scores += round((len(snake.body))/5)
+        scores_in_game.change_num(this_scores/100)
         if snake_on_block():
-            return save_res(scores), scores
+            return save_res(this_scores)
         if snake.intersect1():
             life.life_pop()
             if len(life) < 1:
-                return save_res(scores), scores
+                return save_res(this_scores)
         game_update()
         timer.tick(speed)
         game_action()
@@ -111,13 +112,7 @@ def menu_loop():
         menu_update()
 
 
-def g_o_loop(all_scores):
-
-    #
-    if len(all_scores[0]) >= 3:
-        scores_list = [all_scores[0][res].split()[0] for res in range(3)]
-    else:
-        scores_list = [all_scores[0][res].split()[0] for res in range(len(all_scores)-1)]
+def g_o_loop(scores_list):
     print(scores_list)
     rec_nums = list()
     for rec in range(3):
@@ -132,7 +127,7 @@ def g_o_loop(all_scores):
 
     while True:
         if g_o_action():
-            return True
+            break
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 sys.exit()
@@ -155,17 +150,15 @@ def test_level_loop():
 
 
 def main():
-
     while True:
         pygame.init()
         menu_loop()
         list_scores = game_loop(0)
-        if g_o_loop(list_scores):
-            snake.reset()
-            scores_in_game.reset()
-            life.reset()
-            title.reset()
-        time.sleep(2)
+        g_o_loop(list_scores)
+        snake.reset()
+        scores_in_game.reset()
+        life.reset()
+        title.reset()
 
 
 if __name__ == '__main__':
